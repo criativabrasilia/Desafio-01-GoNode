@@ -16,6 +16,16 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({extended: false}))
 
+//Middleware
+const checkNome = (req, res, next) => {
+  const nome = req.param('nome');
+  if(nome === ''){
+    res.redirect('/')
+  }else{
+    next();
+  }
+}
+
 app.get('/', (req, res) => {
   res.render('main');
 });
@@ -31,12 +41,12 @@ app.post('/check', (req, res) => {
   }
 });
 
-app.get('/major', (req, res) => {
+app.get('/major', checkNome, (req, res) => {
   const nome = req.param('nome');
   res.render('major', {nome});
 });
 
-app.get('/minor', (req, res) => {
+app.get('/minor', checkNome, (req, res) => {
   const nome = req.param('nome');
   res.render('minor', {nome});
 });
